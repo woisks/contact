@@ -1,0 +1,27 @@
+{
+  "name": "woisks/contact",
+  "description": "woisks contact",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "lifenglin",
+      "email": "woisks@126.com"
+    }
+  ],
+  "require": {
+    "php": "^7.1.3"
+  },
+  "autoload": {
+    "psr-4": {
+      "Woisks\\Contact\\": "src/"
+    }
+  },
+  "extra": {
+    "laravel": {
+      "providers": [
+        "Woisks\\Contact\\Providers\\AppServiceProvider"
+      ]
+    },
+    "minimum-stability": "dev"
+  }
+}
