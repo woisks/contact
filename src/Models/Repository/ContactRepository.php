@@ -69,7 +69,7 @@ class ContactRepository
             'isp_id'       => $isp_id,
             'passport_id'  => $passport_id,
             'title'        => $title,
-            'desript'      => $descript,
+            'descript'     => $descript,
             'alias'        => $alias
         ]);
     }

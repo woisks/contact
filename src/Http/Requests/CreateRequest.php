@@ -16,13 +16,13 @@ namespace Woisks\Contact\Http\Requests;
 
 
 /**
- * Class DelContactRequest.
+ * Class CreateRequest.
  *
  * @package Woisks\Contact\Http\Requests
  *
  * @Author  Maple Grove  <bolelin@126.com> 2019/7/19 10:06
  */
-class DelContactRequest extends Requests
+class CreateRequest extends Requests
 {
     /**
      * rules. 2019/7/19 10:06.
@@ -33,7 +33,12 @@ class DelContactRequest extends Requests
     public function rules()
     {
         return [
-            'id' => 'required|numeric|digits_between:18,19'
+            'type'     => 'required|string|min:2|max:18',
+            'numeric'  => 'required|numeric|digits_between:18,19',
+            'isp'      => 'required|numeric|digits_between:18,19',
+            'passport' => 'required|string|min:5|max:45',
+            'title'    => 'sometimes|required|string|max:45',
+            'descript' => 'sometimes|required|string|max:140',
         ];
     }
 

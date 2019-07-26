@@ -50,5 +50,9 @@ class IspRepository
         return self::$model->find($id);
     }
 
+    public function all()
+    {
+        return self::$model->all();
+    }
 
 }

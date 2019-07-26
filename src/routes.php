@@ -17,8 +17,9 @@ Route::prefix('contact')
      ->namespace('Woisks\Contact\Http\Controllers')
      ->group(function () {
 
-         Route::any('create', 'CreateController@create');
-         Route::any('del', 'DelController@del');
-         Route::any('get', 'GetController@get');
+         Route::post('/', 'CreateController@create');
+         Route::post('del/{id}', 'DelController@del')->where(['id' => '[0-9]+']);
+         Route::get('/', 'GetController@get');
+         Route::get('info', 'InfoController@get');
 
      });

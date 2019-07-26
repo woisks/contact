@@ -15,7 +15,7 @@ declare(strict_types=1);
 namespace Woisks\Contact\Http\Controllers;
 
 
-use Woisks\Contact\Http\Requests\GetContactRequest;
+use Woisks\Contact\Http\Requests\GetRequest;
 use Woisks\Contact\Models\Services\GetServices;
 
 /**
@@ -50,16 +50,20 @@ class GetController extends BaseController
     /**
      * get. 2019/7/19 20:31.
      *
-     * @param \Woisks\Contact\Http\Requests\GetContactRequest $request
+     * @param \Woisks\Contact\Http\Requests\GetRequest $request
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function get(GetContactRequest $request)
+    public function get(GetRequest $request)
     {
         $type = $request->input('type');
         $numeric = $request->input('numeric');
 
         $contact = $this->getServices->contact($type, $numeric);
+
+        if ($contact->isEmpty()) {
+            return res(404, 'not exists');
+        }
 
         $passport_id = [];
 
@@ -77,16 +81,14 @@ class GetController extends BaseController
 
                 if ($item->id == $v->passport_id) {
                     $data[$k]['id'] = $v->id;
-                    $data[$k]['type'] = $v->type;
                     $data[$k]['alias'] = $v->alias;
-                    $data[$k]['title'] = $v->title;
                     $data[$k]['passport'] = $item->name;
+                    $data[$k]['title'] = $v->title;
+                    $data[$k]['descript'] = $v->descript;
                 }
             }
         }
-        if (empty($data)) {
-            return res(404, 'not exists');
-        }
+
 
         return res(200, 'success', $data);
     }

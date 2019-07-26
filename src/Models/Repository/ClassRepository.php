@@ -45,13 +45,38 @@ class ClassRepository
         self::$model = $class;
     }
 
+    /**
+     * find. 2019/7/26 9:47.
+     *
+     * @param $class_id
+     *
+     * @return mixed
+     */
     public function find($class_id)
     {
         return self::$model->find($class_id);
     }
 
+    /**
+     * del. 2019/7/26 9:47.
+     *
+     * @param $class_id
+     *
+     * @return mixed
+     */
     public function del($class_id)
     {
         return self::$model->where('id', $class_id)->decrement('count');
+    }
+
+    /**
+     * all. 2019/7/26 9:47.
+     *
+     *
+     * @return \Illuminate\Database\Eloquent\Collection|\Woisks\Contact\Models\Entity\ClassEntity[]|\Woisks\Contact\Models\Repository\ClassRepository[]
+     */
+    public function all()
+    {
+        return self::$model->all();
     }
 }

@@ -21,48 +21,42 @@ use Woisks\Contact\Models\Repository\CountRepository;
 use Woisks\Contact\Models\Repository\IspRepository;
 use Woisks\Contact\Models\Repository\PassportRepository;
 
-
 /**
- * Class DelContactServices.
+ * Class CreateServices.
  *
  * @package Woisks\Contact\Models\Services
  *
- * @Author  Maple Grove  <bolelin@126.com> 2019/7/19 13:36
+ * @Author  Maple Grove  <bolelin@126.com> 2019/7/19 9:58
  */
-class DelContactServices
+class CreateServices
 {
-
     /**
-     * contactRepo.  2019/7/19 13:36.
+     * contactRepo.  2019/7/19 9:58.
      *
      * @var  \Woisks\Contact\Models\Repository\ContactRepository
      */
     private $contactRepo;
-
     /**
-     * passportRepo.  2019/7/19 13:36.
+     * passportRepo.  2019/7/19 9:58.
      *
      * @var  \Woisks\Contact\Models\Repository\PassportRepository
      */
     private $passportRepo;
 
-
     /**
-     * ispRepo.  2019/7/19 13:36.
+     * ispRepo.  2019/7/19 12:09.
      *
      * @var  \Woisks\Contact\Models\Repository\IspRepository
      */
     private $ispRepo;
-
     /**
-     * countRepo.  2019/7/19 13:36.
+     * countRepo.  2019/7/19 12:09.
      *
      * @var  \Woisks\Contact\Models\Repository\CountRepository
      */
     private $countRepo;
-
     /**
-     * classRepo.  2019/7/19 13:36.
+     * classRepo.  2019/7/19 12:09.
      *
      * @var  \Woisks\Contact\Models\Repository\ClassRepository
      */
@@ -70,7 +64,7 @@ class DelContactServices
 
 
     /**
-     * DelContactServices constructor. 2019/7/19 13:36.
+     * CreateServices constructor. 2019/7/19 12:09.
      *
      * @param \Woisks\Contact\Models\Repository\ContactRepository  $contactRepo
      * @param \Woisks\Contact\Models\Repository\PassportRepository $passportRepo
@@ -94,19 +88,49 @@ class DelContactServices
     }
 
     /**
-     * contact. 2019/7/19 20:35.
+     * count. 2019/7/19 12:09.
      *
-     * @param $id
+     * @param $type
      *
      * @return mixed
      */
-    public function contact($id)
+    public function count($type)
     {
-        return $this->contactRepo->find($id);
+        return $this->countRepo->first($type);
     }
 
     /**
-     * isp. 2019/7/19 20:35.
+     * contact. 2019/7/19 12:09.
+     *
+     * @param $type
+     * @param $numeric
+     * @param $isp_id
+     * @param $passport_id
+     * @param $title
+     * @param $descript
+     * @param $alias
+     *
+     * @return mixed
+     */
+    public function contact($type, $numeric, $isp_id, $passport_id, $title, $descript, $alias)
+    {
+        return $this->contactRepo->created($type, $numeric, $isp_id, $passport_id, $title, $descript, $alias);
+    }
+
+    /**
+     * passport. 2019/7/19 12:09.
+     *
+     * @param $passport
+     *
+     * @return mixed
+     */
+    public function passport($passport)
+    {
+        return $this->passportRepo->firstOrCreated($passport);
+    }
+
+    /**
+     * isp. 2019/7/19 12:09.
      *
      * @param $isp_id
      *
@@ -118,7 +142,7 @@ class DelContactServices
     }
 
     /**
-     * class. 2019/7/19 20:35.
+     * class. 2019/7/19 12:09.
      *
      * @param $class_id
      *
@@ -126,30 +150,7 @@ class DelContactServices
      */
     public function class($class_id)
     {
-        return $this->classRepo->del($class_id);
+        return $this->classRepo->find($class_id);
     }
 
-    /**
-     * passport. 2019/7/19 20:35.
-     *
-     * @param $passport_id
-     *
-     * @return mixed
-     */
-    public function passport($passport_id)
-    {
-        return $this->passportRepo->del($passport_id);
-    }
-
-    /**
-     * count. 2019/7/19 20:35.
-     *
-     * @param $type_name
-     *
-     * @return mixed
-     */
-    public function count($type_name)
-    {
-        return $this->countRepo->del($type_name);
-    }
 }

@@ -17,8 +17,8 @@ namespace Woisks\Contact\Http\Controllers;
 
 use DB;
 use Throwable;
-use Woisks\Contact\Http\Requests\CreateContactRequest;
-use Woisks\Contact\Models\Services\CreateContactServices;
+use Woisks\Contact\Http\Requests\CreateRequest;
+use Woisks\Contact\Models\Services\CreateServices;
 
 /**
  * Class CreateController.
@@ -32,18 +32,18 @@ class CreateController extends BaseController
     /**
      * contactServices.  2019/7/19 12:07.
      *
-     * @var  \Woisks\Contact\Models\Services\CreateContactServices
+     * @var  \Woisks\Contact\Models\Services\CreateServices
      */
     private $contactServices;
 
     /**
      * CreateController constructor. 2019/7/19 12:07.
      *
-     * @param \Woisks\Contact\Models\Services\CreateContactServices $contactServices
+     * @param \Woisks\Contact\Models\Services\CreateServices $contactServices
      *
      * @return void
      */
-    public function __construct(CreateContactServices $contactServices)
+    public function __construct(CreateServices $contactServices)
     {
         $this->contactServices = $contactServices;
     }
@@ -52,17 +52,17 @@ class CreateController extends BaseController
     /**
      * create. 2019/7/19 12:08.
      *
-     * @param \Woisks\Contact\Http\Requests\CreateContactRequest $request
+     * @param \Woisks\Contact\Http\Requests\CreateRequest $request
      *
      * @return \Illuminate\Http\JsonResponse
      * @throws \Exception
      */
-    public function create(CreateContactRequest $request)
+    public function create(CreateRequest $request)
     {
         return $this->services(
             $request->input('type'),
             $request->input('numeric'),
-            $request->input('isp_id'),
+            $request->input('isp'),
             $request->input('passport'),
             $request->input('title', ''),
             $request->input('descript', '')
@@ -87,7 +87,7 @@ class CreateController extends BaseController
     {
         $count = $this->contactServices->count($type);
         if (!$count) {
-            return res(422, 'type param error');
+            return res(422, 'param type error or not exists');
         }
 
         try {
@@ -97,7 +97,9 @@ class CreateController extends BaseController
 
             $isp = $this->contactServices->isp($isp_id);
             $isp->increment('count');
+
             $this->contactServices->class($isp->isp_class_id)->increment('count');
+
             $passport_db = $this->contactServices->passport($passport);
             $contact_db = $this->contactServices->contact($type, $numeric, $isp_id, $passport_db->id, $title, $descript, $isp->name);
 
@@ -112,8 +114,9 @@ class CreateController extends BaseController
         return res(200, 'success', [
             'id'       => $contact_db->id,
             'alias'    => $isp->name,
+            'passport' => $passport,
             'title'    => $title,
-            'passport' => $passport
+            'descript' => $descript
         ]);
     }
 }
