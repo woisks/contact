@@ -15,44 +15,44 @@ declare(strict_types=1);
 namespace Woisks\Contact\Models\Repository;
 
 
-use Woisks\Contact\Models\Entity\CountEntity;
+use Woisks\Contact\Models\Entity\TypeEntity;
 
 /**
- * Class CountRepository.
+ * Class TypeRepository.
  *
  * @package Woisks\Contact\Models\Repository
  *
  * @Author  Maple Grove  <bolelin@126.com> 2019/7/19 9:50
  */
-class CountRepository
+class TypeRepository
 {
     /**
      * model.  2019/7/19 9:50.
      *
-     * @var static \Woisks\Contact\Models\Entity\CountEntity
+     * @var static \Woisks\Contact\Models\Entity\TypeEntity
      */
     private static $model;
 
     /**
-     * CountRepository constructor. 2019/7/19 9:50.
+     * TypeRepository constructor. 2019/7/19 9:50.
      *
-     * @param \Woisks\Contact\Models\Entity\CountEntity $count
+     * @param \Woisks\Contact\Models\Entity\TypeEntity $count
      *
      * @return void
      */
-    public function __construct(CountEntity $count)
+    public function __construct(TypeEntity $count)
     {
         self::$model = $count;
     }
 
     public function first($type)
     {
-        return self::$model->where('name', $type)->first();
+        return self::$model->where('type', $type)->first();
     }
 
     public function del($type_name)
     {
-        return self::$model->where('name', $type_name)->decrement('count');
+        return self::$model->where('type', $type_name)->decrement('count');
     }
 
 }

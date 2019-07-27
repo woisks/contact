@@ -16,13 +16,13 @@ namespace Woisks\Contact\Models\Entity;
 
 
 /**
- * Class CountEntity.
+ * Class TypeEntity.
  *
  * @package Woisks\Contact\Models\Entity
  *
  * @Author  Maple Grove  <bolelin@126.com> 2019/7/19 9:43
  */
-class CountEntity extends Models
+class TypeEntity extends Models
 {
     /**
      * table.  2019/7/19 9:43.
@@ -39,7 +39,6 @@ class CountEntity extends Models
         'id',
         'name',
         'count',
-        'status',
         'readme'
     ];
 

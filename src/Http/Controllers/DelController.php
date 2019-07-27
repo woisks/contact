@@ -15,9 +15,7 @@ declare(strict_types=1);
 namespace Woisks\Contact\Http\Controllers;
 
 
-use DB;
-use Throwable;
-use Woisks\Contact\Models\Services\DelServices;
+use Woisks\Contact\Models\Repository\ContactRepository;
 
 /**
  * Class DelController.
@@ -29,60 +27,41 @@ use Woisks\Contact\Models\Services\DelServices;
 class DelController extends BaseController
 {
     /**
-     * delContactServices.  2019/7/24 15:38.
+     * contactRepo.  2019/7/27 22:29.
      *
-     * @var  \Woisks\Contact\Models\Services\DelServices
+     * @var  ContactRepository
      */
-    private $delContactServices;
+    private $contactRepo;
 
     /**
-     * DelController constructor. 2019/7/24 15:38.
+     * DelController constructor. 2019/7/27 22:29.
      *
-     * @param \Woisks\Contact\Models\Services\DelServices $delContactServices
+     * @param ContactRepository $contactRepo
      *
      * @return void
      */
-    public function __construct(DelServices $delContactServices)
+    public function __construct(ContactRepository $contactRepo)
     {
-        $this->delContactServices = $delContactServices;
+        $this->contactRepo = $contactRepo;
     }
 
+
     /**
-     * del. 2019/7/24 15:38.
+     * del. 2019/7/27 22:29.
      *
      * @param $id
      *
      * @return \Illuminate\Http\JsonResponse
+     * @throws \Exception
      */
     public function del($id)
     {
         if (strlen($id) != 18 && strlen($id) != 19 && !is_int($id)) {
             return res(422, 'param id error');
         }
-
-        $contact = $this->delContactServices->contact($id);
-        if (!$contact) {
-            return res(404, 'contact id not exists');
+        if (!$this->contactRepo->destroy($id)) {
+            return res(404, 'contact info not exists');
         }
-        try {
-            DB::beginTransaction();
-
-            $isp = $this->delContactServices->isp($contact->isp_id);
-
-            $this->delContactServices->class($isp->isp_class_id);
-            $isp->decrement('count');
-
-            $this->delContactServices->count($contact->type);
-            $this->delContactServices->passport($contact->passport_id);
-
-            $contact->delete();
-        } catch (Throwable $e) {
-            DB::rollBack();
-
-            return res(422, 'param error');
-        }
-        DB::commit();
-
         return res(200, 'success');
     }
 }

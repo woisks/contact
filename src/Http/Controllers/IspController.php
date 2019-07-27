@@ -15,58 +15,47 @@ declare(strict_types=1);
 namespace Woisks\Contact\Http\Controllers;
 
 
-use Woisks\Contact\Models\Services\GetInfoServices;
+use Woisks\Contact\Models\Repository\IspRepository;
 
 /**
- * Class InfoController.
+ * Class IspController.
  *
  * @package Woisks\Contact\Http\Controllers
  *
  * @Author  Maple Grove  <bolelin@126.com> 2019/7/26 9:47
  */
-class InfoController extends BaseController
+class IspController extends BaseController
 {
-    /**
-     * infoServices.  2019/7/26 9:47.
-     *
-     * @var  \Woisks\Contact\Models\Services\GetInfoServices
-     */
-    private $infoServices;
 
     /**
-     * InfoController constructor. 2019/7/26 9:47.
+     * ispRepo.  2019/7/27 22:15.
      *
-     * @param \Woisks\Contact\Models\Services\GetInfoServices $infoServices
+     * @var  IspRepository
+     */
+    private $ispRepo;
+
+
+    /**
+     * IspController constructor. 2019/7/27 22:15.
+     *
+     * @param IspRepository $ispRepo
      *
      * @return void
      */
-    public function __construct(GetInfoServices $infoServices)
+    public function __construct(IspRepository $ispRepo)
     {
-        $this->infoServices = $infoServices;
+        $this->ispRepo = $ispRepo;
     }
 
 
     /**
-     * get. 2019/7/26 9:47.
+     * get. 2019/7/27 22:15.
      *
      *
      * @return \Illuminate\Http\JsonResponse
      */
     public function get()
     {
-        $isp = $this->infoServices->isp();
-        $class = $this->infoServices->class();
-
-        $data = [];
-        foreach ($class as $v) {
-
-            foreach ($isp as $item) {
-                if ($v->id == $item->isp_class_id) {
-                    $data[$v->name][] = $item;
-                }
-            }
-        }
-
-        return res(200, 'success', $data);
+        return res(200, 'success', $this->ispRepo->all());
     }
 }

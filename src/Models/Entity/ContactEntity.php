@@ -39,24 +39,14 @@ class ContactEntity extends Models
         'id',
         'account_uid',
         'type',
-        'type_numeric',
-        'isp_id',
-        'passport_id',
+        'numeric',
+        'isp',
+        'passport',
         'title',
         'descript',
         'created_at',
         'updated_at',
         'status',
-        'alias'
     ];
-    /**
-     * hidden.  2019/7/19 16:51.
-     *
-     * @var  array
-     */
-    protected $hidden = [
-        'status',
-        'account_uid',
-        'isp_id'
-    ];
+
 }

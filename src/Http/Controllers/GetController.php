@@ -15,8 +15,7 @@ declare(strict_types=1);
 namespace Woisks\Contact\Http\Controllers;
 
 
-use Woisks\Contact\Http\Requests\GetRequest;
-use Woisks\Contact\Models\Services\GetServices;
+use Woisks\Contact\Models\Repository\ContactRepository;
 
 /**
  * Class GetController.
@@ -28,68 +27,43 @@ use Woisks\Contact\Models\Services\GetServices;
 class GetController extends BaseController
 {
     /**
-     * getServices.  2019/7/19 20:31.
+     * contactRepo.  2019/7/27 22:12.
      *
-     * @var  \Woisks\Contact\Models\Services\GetServices
+     * @var  ContactRepository
      */
-    private $getServices;
+    private $contactRepo;
 
     /**
-     * GetController constructor. 2019/7/19 20:31.
+     * GetController constructor. 2019/7/27 22:12.
      *
-     * @param \Woisks\Contact\Models\Services\GetServices $getServices
+     * @param ContactRepository $contactRepo
      *
      * @return void
      */
-    public function __construct(GetServices $getServices)
+    public function __construct(ContactRepository $contactRepo)
     {
-        $this->getServices = $getServices;
+        $this->contactRepo = $contactRepo;
     }
 
 
     /**
-     * get. 2019/7/19 20:31.
+     * get. 2019/7/27 22:17.
      *
-     * @param \Woisks\Contact\Http\Requests\GetRequest $request
+     * @param $type
+     * @param $numeric
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function get(GetRequest $request)
+    public function get($type, $numeric)
     {
-        $type = $request->input('type');
-        $numeric = $request->input('numeric');
 
-        $contact = $this->getServices->contact($type, $numeric);
+        $contact = $this->contactRepo->whereTypeNumeric($type, $numeric);
 
         if ($contact->isEmpty()) {
-            return res(404, 'not exists');
-        }
-
-        $passport_id = [];
-
-        foreach ($contact as $v) {
-            $passport_id[] = $v->passport_id;
+            return res(404, 'param error or not exists');
         }
 
 
-        $passport = $this->getServices->passport($passport_id);
-
-        $data = [];
-        foreach ($contact as $k => $v) {
-
-            foreach ($passport as $item) {
-
-                if ($item->id == $v->passport_id) {
-                    $data[$k]['id'] = $v->id;
-                    $data[$k]['alias'] = $v->alias;
-                    $data[$k]['passport'] = $item->name;
-                    $data[$k]['title'] = $v->title;
-                    $data[$k]['descript'] = $v->descript;
-                }
-            }
-        }
-
-
-        return res(200, 'success', $data);
+        return res(200, 'success', $contact);
     }
 }

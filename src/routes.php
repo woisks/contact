@@ -14,15 +14,15 @@ declare(strict_types=1);
 
 
 Route::prefix('contact')
-     ->middleware('throttle:60,1')
-     ->namespace('Woisks\Contact\Http\Controllers')
-     ->group(function () {
+    ->middleware('throttle:60,1')
+    ->namespace('Woisks\Contact\Http\Controllers')
+    ->group(function () {
 
-         Route::get('/', 'GetController@get');
-         Route::get('info', 'InfoController@get');
+        Route::get('/{type}/{numeric}', 'GetController@get')->where(['type' => '[a-z]+', 'numeric' => '[0-9]+']);
+        Route::get('isp', 'IspController@get');
 
-         Route::middleware('token')->group(function () {
-             Route::post('/', 'CreateController@create');
-             Route::post('del/{id}', 'DelController@del')->where(['id' => '[0-9]+']);
-         });
-     });
+        Route::middleware('token')->group(function () {
+            Route::post('/', 'CreateController@create');
+            Route::post('del/{id}', 'DelController@del')->where(['id' => '[0-9]+']);
+        });
+    });

@@ -16,7 +16,6 @@ namespace Woisks\Contact\Models\Repository;
 
 
 use Woisks\Contact\Models\Entity\ContactEntity;
-use Woisks\Jwt\Services\JwtService;
 
 /**
  * Class ContactRepository.
@@ -27,17 +26,19 @@ use Woisks\Jwt\Services\JwtService;
  */
 class ContactRepository
 {
+
     /**
-     * model.  2019/7/19 9:48.
+     * model.  2019/7/27 22:24.
      *
-     * @var static \Woisks\Contact\Models\Entity\ContactEntity
+     * @var static ContactEntity
      */
     private static $model;
 
+
     /**
-     * ContactRepository constructor. 2019/7/19 9:48.
+     * ContactRepository constructor. 2019/7/27 22:24.
      *
-     * @param \Woisks\Contact\Models\Entity\ContactEntity $contact
+     * @param ContactEntity $contact
      *
      * @return void
      */
@@ -46,31 +47,31 @@ class ContactRepository
         self::$model = $contact;
     }
 
+
     /**
-     * created. 2019/7/19 10:18.
+     * created. 2019/7/27 22:24.
      *
+     * @param $account_uid
      * @param $type
      * @param $numeric
-     * @param $isp_id
-     * @param $passport_id
+     * @param $isp
+     * @param $passport
      * @param $title
      * @param $descript
-     * @param $alias
      *
      * @return mixed
      */
-    public function created($type, $numeric, $isp_id, $passport_id, $title, $descript, $alias)
+    public function created($account_uid, $type, $numeric, $isp, $passport, $title, $descript)
     {
         return self::$model->create([
-            'id'           => create_numeric_id(),
-            'account_uid'  => JwtService::jwt_account_uid(),
-            'type'         => $type,
-            'type_numeric' => $numeric,
-            'isp_id'       => $isp_id,
-            'passport_id'  => $passport_id,
-            'title'        => $title,
-            'descript'     => $descript,
-            'alias'        => $alias
+            'id'          => create_numeric_id(),
+            'account_uid' => $account_uid,
+            'type'        => $type,
+            'numeric'     => $numeric,
+            'isp'         => $isp,
+            'passport'    => $passport,
+            'title'       => $title,
+            'descript'    => $descript
         ]);
     }
 
@@ -87,7 +88,20 @@ class ContactRepository
     }
 
     /**
-     * whereTypeNumeric. 2019/7/19 16:22.
+     * destroy. 2019/7/27 22:24.
+     *
+     * @param $id
+     *
+     * @return bool|null
+     * @throws \Exception
+     */
+    public function destroy($id)
+    {
+        return self::$model->destroy($id);
+    }
+
+    /**
+     * whereTypeNumeric. 2019/7/27 22:24.
      *
      * @param $type
      * @param $numeric
@@ -96,6 +110,6 @@ class ContactRepository
      */
     public function whereTypeNumeric($type, $numeric)
     {
-        return self::$model->where('type', $type)->where('type_numeric', $numeric)->get();
+        return self::$model->where('numeric', $numeric)->where('type', $type)->get();
     }
 }

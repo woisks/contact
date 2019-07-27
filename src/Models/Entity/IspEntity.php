@@ -37,7 +37,6 @@ class IspEntity extends Models
      */
     protected $fillable = [
         'id',
-        'isp_class_id',
         'ico_photo_id',
         'name',
         'status',

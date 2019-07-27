@@ -18,7 +18,10 @@ namespace Woisks\Contact\Http\Controllers;
 use DB;
 use Throwable;
 use Woisks\Contact\Http\Requests\CreateRequest;
-use Woisks\Contact\Models\Services\CreateServices;
+use Woisks\Contact\Models\Repository\ContactRepository;
+use Woisks\Contact\Models\Repository\IspRepository;
+use Woisks\Contact\Models\Repository\TypeRepository;
+use Woisks\Jwt\Services\JwtService;
 
 /**
  * Class CreateController.
@@ -29,33 +32,52 @@ use Woisks\Contact\Models\Services\CreateServices;
  */
 class CreateController extends BaseController
 {
-    /**
-     * contactServices.  2019/7/19 12:07.
-     *
-     * @var  \Woisks\Contact\Models\Services\CreateServices
-     */
-    private $contactServices;
 
     /**
-     * CreateController constructor. 2019/7/19 12:07.
+     * contactRepo.  2019/7/27 21:56.
      *
-     * @param \Woisks\Contact\Models\Services\CreateServices $contactServices
+     * @var  ContactRepository
+     */
+    private $contactRepo;
+
+    /**
+     * typeRepo.  2019/7/27 21:56.
+     *
+     * @var  TypeRepository
+     */
+    private $typeRepo;
+
+    /**
+     * ispRepo.  2019/7/27 21:56.
+     *
+     * @var  IspRepository
+     */
+    private $ispRepo;
+
+
+    /**
+     * CreateController constructor. 2019/7/27 21:56.
+     *
+     * @param ContactRepository $contactRepo
+     * @param IspRepository $ispRepo
+     * @param TypeRepository $typeRepo
      *
      * @return void
      */
-    public function __construct(CreateServices $contactServices)
+    public function __construct(ContactRepository $contactRepo, IspRepository $ispRepo, TypeRepository $typeRepo)
     {
-        $this->contactServices = $contactServices;
+        $this->contactRepo = $contactRepo;
+        $this->ispRepo     = $ispRepo;
+        $this->typeRepo    = $typeRepo;
     }
 
 
     /**
-     * create. 2019/7/19 12:08.
+     * create. 2019/7/27 21:58.
      *
-     * @param \Woisks\Contact\Http\Requests\CreateRequest $request
+     * @param CreateRequest $request
      *
      * @return \Illuminate\Http\JsonResponse
-     * @throws \Exception
      */
     public function create(CreateRequest $request)
     {
@@ -71,7 +93,7 @@ class CreateController extends BaseController
 
 
     /**
-     * services. 2019/7/19 12:07.
+     * services. 2019/7/27 21:56.
      *
      * @param $type
      * @param $numeric
@@ -81,31 +103,29 @@ class CreateController extends BaseController
      * @param $descript
      *
      * @return \Illuminate\Http\JsonResponse
-     * @throws \Exception
      */
     public function services($type, $numeric, $isp_id, $passport, $title, $descript)
     {
-        $count = $this->contactServices->count($type);
-        if (!$count) {
-            return res(422, 'param type error or not exists');
+        if (!$type_db = $this->typeRepo->first($type)) {
+            return res(404, 'param type error or not exists');
+        }
+
+        if (!$isp_db = $this->ispRepo->find($isp_id)) {
+            return res(404, 'param isp error or not exists');
         }
 
         try {
             DB::beginTransaction();
 
-            $count->increment('count');
+            $type_db->increment('count');
 
-            $isp = $this->contactServices->isp($isp_id);
-            $isp->increment('count');
 
-            $this->contactServices->class($isp->isp_class_id)->increment('count');
+            $isp_db->increment('count');
 
-            $passport_db = $this->contactServices->passport($passport);
-            $contact_db = $this->contactServices->contact($type, $numeric, $isp_id, $passport_db->id, $title, $descript, $isp->name);
+            $contact_db = $this->contactRepo->created(JwtService::jwt_account_uid(), $type, $numeric, $isp_db->name, $passport, $title, $descript);
 
         } catch (Throwable $e) {
             DB::rollBack();
-
             return res(422, 'param error');
         }
 
@@ -113,7 +133,7 @@ class CreateController extends BaseController
 
         return res(200, 'success', [
             'id'       => $contact_db->id,
-            'alias'    => $isp->name,
+            'alias'    => $isp_db->name,
             'passport' => $passport,
             'title'    => $title,
             'descript' => $descript
