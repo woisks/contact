@@ -16,6 +16,7 @@ namespace Woisks\Contact\Http\Controllers;
 
 
 use DB;
+use Illuminate\Http\JsonResponse;
 use Throwable;
 use Woisks\Contact\Http\Requests\CreateRequest;
 use Woisks\Contact\Models\Repository\ContactRepository;
@@ -73,11 +74,12 @@ class CreateController extends BaseController
 
 
     /**
-     * create. 2019/7/27 21:58.
+     * create. 2019/7/27 22:39.
      *
      * @param CreateRequest $request
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
+     * @throws \Exception
      */
     public function create(CreateRequest $request)
     {
@@ -93,7 +95,7 @@ class CreateController extends BaseController
 
 
     /**
-     * services. 2019/7/27 21:56.
+     * services. 2019/7/27 22:39.
      *
      * @param $type
      * @param $numeric
@@ -102,7 +104,8 @@ class CreateController extends BaseController
      * @param $title
      * @param $descript
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
+     * @throws \Exception
      */
     public function services($type, $numeric, $isp_id, $passport, $title, $descript)
     {
