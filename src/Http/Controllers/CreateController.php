@@ -122,7 +122,6 @@ class CreateController extends BaseController
 
             $type_db->increment('count');
 
-
             $isp_db->increment('count');
 
             $contact_db = $this->contactRepo->created(JwtService::jwt_account_uid(), $type, $numeric, $isp_db->name, $passport, $title, $descript);

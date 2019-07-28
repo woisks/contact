@@ -15,6 +15,7 @@ declare(strict_types=1);
 namespace Woisks\Contact\Http\Controllers;
 
 
+use Illuminate\Http\JsonResponse;
 use Woisks\Contact\Models\Repository\ContactRepository;
 
 /**
@@ -52,7 +53,7 @@ class GetController extends BaseController
      * @param $type
      * @param $numeric
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function get($type, $numeric)
     {

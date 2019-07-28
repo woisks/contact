@@ -26,17 +26,19 @@ use Woisks\Contact\Models\Entity\TypeEntity;
  */
 class TypeRepository
 {
+
     /**
-     * model.  2019/7/19 9:50.
+     * model.  2019/7/28 9:55.
      *
-     * @var static \Woisks\Contact\Models\Entity\TypeEntity
+     * @var static TypeEntity
      */
     private static $model;
 
+
     /**
-     * TypeRepository constructor. 2019/7/19 9:50.
+     * TypeRepository constructor. 2019/7/28 9:55.
      *
-     * @param \Woisks\Contact\Models\Entity\TypeEntity $count
+     * @param TypeEntity $count
      *
      * @return void
      */
@@ -45,12 +47,26 @@ class TypeRepository
         self::$model = $count;
     }
 
+    /**
+     * first. 2019/7/28 9:55.
+     *
+     * @param $type
+     *
+     * @return mixed
+     */
     public function first($type)
     {
         return self::$model->where('type', $type)->first();
     }
 
-    public function del($type_name)
+    /**
+     * decrement. 2019/7/28 9:55.
+     *
+     * @param $type_name
+     *
+     * @return mixed
+     */
+    public function decrement($type_name)
     {
         return self::$model->where('type', $type_name)->decrement('count');
     }

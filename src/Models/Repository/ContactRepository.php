@@ -87,18 +87,6 @@ class ContactRepository
         return self::$model->find($id);
     }
 
-    /**
-     * destroy. 2019/7/27 22:24.
-     *
-     * @param $id
-     *
-     * @return bool|null
-     * @throws \Exception
-     */
-    public function destroy($id)
-    {
-        return self::$model->destroy($id);
-    }
 
     /**
      * whereTypeNumeric. 2019/7/27 22:24.

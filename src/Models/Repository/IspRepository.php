@@ -26,17 +26,19 @@ use Woisks\Contact\Models\Entity\IspEntity;
  */
 class IspRepository
 {
+
     /**
-     * model.  2019/7/19 9:49.
+     * model.  2019/7/28 9:59.
      *
-     * @var static \Woisks\Contact\Models\Entity\IspEntity
+     * @var static IspEntity
      */
     private static $model;
 
+
     /**
-     * IspRepository constructor. 2019/7/19 9:49.
+     * IspRepository constructor. 2019/7/28 9:59.
      *
-     * @param \Woisks\Contact\Models\Entity\IspEntity $isp
+     * @param IspEntity $isp
      *
      * @return void
      */
@@ -45,14 +47,39 @@ class IspRepository
         self::$model = $isp;
     }
 
+    /**
+     * find. 2019/7/28 9:59.
+     *
+     * @param $id
+     *
+     * @return mixed
+     */
     public function find($id)
     {
         return self::$model->find($id);
     }
 
+    /**
+     * all. 2019/7/28 9:59.
+     *
+     *
+     * @return \Illuminate\Database\Eloquent\Collection|IspEntity[]|IspRepository[]
+     */
     public function all()
     {
         return self::$model->all();
+    }
+
+    /**
+     * decrement. 2019/7/28 9:59.
+     *
+     * @param $isp_id
+     *
+     * @return mixed
+     */
+    public function decrement($isp_id)
+    {
+        return self::$model->where('id', $isp_id)->decrement('count');
     }
 
 }

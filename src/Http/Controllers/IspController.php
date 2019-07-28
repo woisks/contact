@@ -15,6 +15,7 @@ declare(strict_types=1);
 namespace Woisks\Contact\Http\Controllers;
 
 
+use Illuminate\Http\JsonResponse;
 use Woisks\Contact\Models\Repository\IspRepository;
 
 /**
@@ -52,7 +53,7 @@ class IspController extends BaseController
      * get. 2019/7/27 22:15.
      *
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function get()
     {
