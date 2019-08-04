@@ -26,7 +26,7 @@ use Woisks\Contact\Models\Repository\UserRepository;
 use Woisks\Jwt\Services\JwtService;
 
 /**
- * Class CreateController.
+ * Class ChangeController.
  *
  * @package Woisks\Contact\Http\Controllers
  *

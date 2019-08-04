@@ -28,4 +28,5 @@ Route::prefix('contact')
             Route::post('/', 'CreateController@create');
             Route::post('del/{id}', 'DelController@del')->where(['id' => '[0-9]+']);
         });
+        
     });

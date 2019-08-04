@@ -16,7 +16,7 @@ namespace Woisks\Contact\Http\Requests;
 
 
 /**
- * Class CreateRequest.
+ * Class ChangeRequest.
  *
  * @package Woisks\Contact\Http\Requests
  *
