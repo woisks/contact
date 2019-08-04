@@ -22,7 +22,6 @@ use Woisks\Contact\Http\Requests\CreateRequest;
 use Woisks\Contact\Models\Repository\ContactRepository;
 use Woisks\Contact\Models\Repository\IspRepository;
 use Woisks\Contact\Models\Repository\TypeRepository;
-use Woisks\Contact\Models\Repository\UserRepository;
 use Woisks\Jwt\Services\JwtService;
 
 /**
@@ -56,15 +55,12 @@ class CreateController extends BaseController
      */
     private $ispRepo;
 
-    private $userRepo;
 
-
-    public function __construct(ContactRepository $contactRepo, IspRepository $ispRepo, TypeRepository $typeRepo, UserRepository $userRepo)
+    public function __construct(ContactRepository $contactRepo, IspRepository $ispRepo, TypeRepository $typeRepo)
     {
         $this->contactRepo = $contactRepo;
         $this->ispRepo     = $ispRepo;
         $this->typeRepo    = $typeRepo;
-        $this->userRepo    = $userRepo;
     }
 
 
@@ -120,9 +116,6 @@ class CreateController extends BaseController
             $type_db->increment('count');
 
             $isp_db->increment('count');
-
-            //模块用户记录
-            $this->userRepo->incrementU(JwtService::jwt_account_uid(), $type);
 
             //创建联系信息
             $contact_db = $this->contactRepo->created(JwtService::jwt_account_uid(), $type, $numeric, $isp_db->name, $passport, $title, $descript);
