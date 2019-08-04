@@ -16,22 +16,22 @@ namespace Woisks\Contact\Models\Entity;
 
 
 /**
- * Class ContactEntity.
+ * Class UserEntity.
  *
  * @package Woisks\Contact\Models\Entity
  *
- * @Author  Maple Grove  <bolelin@126.com> 2019/7/19 9:39
+ * @Author Maple Grove  <bolelin@126.com> 2019/8/4 11:37
  */
-class ContactEntity extends Models
+class UserEntity extends Models
 {
     /**
-     * table.  2019/7/19 9:39.
+     * table.  2019/8/4 11:37.
      *
      * @var  string
      */
-    protected $table = 'contact';
+    protected $table = 'contact_user_count';
     /**
-     * fillable.  2019/7/19 9:39.
+     * fillable.  2019/8/4 11:37.
      *
      * @var  array
      */
@@ -39,17 +39,13 @@ class ContactEntity extends Models
         'id',
         'account_uid',
         'type',
-        'numeric',
-        'isp',
-        'passport',
-        'title',
-        'descript',
-        'created_at'
+        'count'
     ];
 
     /**
+     * timestamps.  2019/8/4 11:37.
      *
+     * @var  bool
      */
-    public const UPDATED_AT = null;
-
+    public $timestamps = false;
 }

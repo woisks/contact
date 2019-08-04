@@ -18,7 +18,10 @@ Route::prefix('contact')
     ->namespace('Woisks\Contact\Http\Controllers')
     ->group(function () {
 
+        //获取模块ID的联系信息
         Route::get('/{type}/{numeric}', 'GetController@get')->where(['type' => '[a-z]+', 'numeric' => '[0-9]+']);
+
+        //获取服务提供商信息
         Route::get('isp', 'IspController@get');
 
         Route::middleware('token')->group(function () {

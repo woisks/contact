@@ -57,13 +57,11 @@ class GetController extends BaseController
      */
     public function get($type, $numeric)
     {
-
         $contact = $this->contactRepo->whereTypeNumeric($type, $numeric);
 
         if ($contact->isEmpty()) {
             return res(404, 'param error or not exists');
         }
-
 
         return res(200, 'success', $contact);
     }

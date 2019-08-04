@@ -19,6 +19,7 @@ use Illuminate\Http\JsonResponse;
 use Woisks\Contact\Models\Repository\ContactRepository;
 use Woisks\Contact\Models\Repository\IspRepository;
 use Woisks\Contact\Models\Repository\TypeRepository;
+use Woisks\Jwt\Services\JwtService;
 
 /**
  * Class DelController.
@@ -65,7 +66,6 @@ class DelController extends BaseController
         $this->typeRepo    = $typeRepo;
     }
 
-
     /**
      * del. 2019/7/27 22:29.
      *
@@ -84,7 +84,13 @@ class DelController extends BaseController
             \DB::beginTransaction();
 
             if (!$contact = $this->contactRepo->find($id)) {
+                //效验是否存在
                 return res(404, 'contact info not exists');
+            }
+
+            if ($contact->account_uid != JwtService::jwt_account_uid()) {
+                //效验权限归属
+                return res(404, 'your data not exists ');
             }
 
             $this->typeRepo->decrement($contact->type);
@@ -92,6 +98,7 @@ class DelController extends BaseController
             $contact->delete();
 
         } catch (\Throwable $e) {
+
             \DB::rollBack();
             return res(500, 'Come back later');
         }

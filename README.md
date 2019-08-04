@@ -1,9 +1,13 @@
 ## status code 
 
-422 param error
+200 success (成功)
 
-404 not exists
+404 not exists (不存在)
 
-200 success
+422 param error (参数错误)
+
+500 Come back later (内部错误)
+
+
 
 

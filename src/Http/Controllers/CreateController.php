@@ -22,6 +22,7 @@ use Woisks\Contact\Http\Requests\CreateRequest;
 use Woisks\Contact\Models\Repository\ContactRepository;
 use Woisks\Contact\Models\Repository\IspRepository;
 use Woisks\Contact\Models\Repository\TypeRepository;
+use Woisks\Contact\Models\Repository\UserRepository;
 use Woisks\Jwt\Services\JwtService;
 
 /**
@@ -55,21 +56,15 @@ class CreateController extends BaseController
      */
     private $ispRepo;
 
+    private $userRepo;
 
-    /**
-     * CreateController constructor. 2019/7/27 21:56.
-     *
-     * @param ContactRepository $contactRepo
-     * @param IspRepository $ispRepo
-     * @param TypeRepository $typeRepo
-     *
-     * @return void
-     */
-    public function __construct(ContactRepository $contactRepo, IspRepository $ispRepo, TypeRepository $typeRepo)
+
+    public function __construct(ContactRepository $contactRepo, IspRepository $ispRepo, TypeRepository $typeRepo, UserRepository $userRepo)
     {
         $this->contactRepo = $contactRepo;
         $this->ispRepo     = $ispRepo;
         $this->typeRepo    = $typeRepo;
+        $this->userRepo    = $userRepo;
     }
 
 
@@ -110,11 +105,13 @@ class CreateController extends BaseController
     public function services($type, $numeric, $isp_id, $passport, $title, $descript)
     {
         if (!$type_db = $this->typeRepo->first($type)) {
-            return res(404, 'param type error or not exists');
+            //效验模块类型
+            return res(404, 'param type not exists');
         }
 
         if (!$isp_db = $this->ispRepo->find($isp_id)) {
-            return res(404, 'param isp error or not exists');
+            //效验服务提供商是否合法
+            return res(404, 'param isp not exists');
         }
 
         try {
@@ -124,21 +121,20 @@ class CreateController extends BaseController
 
             $isp_db->increment('count');
 
+            //模块用户记录
+            $this->userRepo->incrementU(JwtService::jwt_account_uid(), $type);
+
+            //创建联系信息
             $contact_db = $this->contactRepo->created(JwtService::jwt_account_uid(), $type, $numeric, $isp_db->name, $passport, $title, $descript);
 
         } catch (Throwable $e) {
+
             DB::rollBack();
             return res(422, 'param error');
         }
 
         DB::commit();
 
-        return res(200, 'success', [
-            'id'       => $contact_db->id,
-            'alias'    => $isp_db->name,
-            'passport' => $passport,
-            'title'    => $title,
-            'descript' => $descript
-        ]);
+        return res(200, 'success', $contact_db);
     }
 }
